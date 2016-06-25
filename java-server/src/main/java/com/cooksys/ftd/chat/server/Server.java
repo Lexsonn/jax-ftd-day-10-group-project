@@ -41,13 +41,7 @@ public class Server implements Runnable {
 			run();
 		} finally {
 			for (ClientHandler clientHandler : this.handlerThreads.keySet()) {
-				try {
-					clientHandler.close();
-					this.handlerThreads.get(clientHandler).join();
-					this.handlerThreads.remove(clientHandler);
-				} catch (IOException | InterruptedException e) {
-					log.warn("Failed to close handler :/", e);
-				}
+				close(clientHandler);
 			}
 		}
 	}
@@ -74,15 +68,19 @@ public class Server implements Runnable {
 	}
 
 	public void close(ClientHandler clientHandler) {
-		if (handlerThreads.get(clientHandler) == null)
+		Thread thread = handlerThreads.get(clientHandler);
+		if (thread == null)
 			return;
 		log.info("Client {}@{} has ended the connection.", 
 				clientHandler, clientHandler.getSocket().getRemoteSocketAddress().toString().substring(1));
-		handlerThreads.remove(clientHandler);
 		try {
+			handlerThreads.remove(clientHandler);
 			clientHandler.close();
+			thread.join();
 		} catch (IOException e) {
 			log.error("Client socket close has been interrupted", e);
+		} catch (InterruptedException e) {
+			log.error("Failed to join thread", e);
 		}
 	}
 

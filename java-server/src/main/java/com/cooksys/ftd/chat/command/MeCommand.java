@@ -7,7 +7,7 @@ public class MeCommand extends AbstractCommand {
 	
 	public MeCommand() {
 		super ("/me",
-			   "(no arguments)",
+			   "(message)",
 			   "Displays a status message (Formatted as {timestamp - name} {message})");
 	}
 	
