@@ -52,7 +52,9 @@ const Palette = {
       case 'bgWhite':
         return chalk.bgWhite
       case 'bgGray':
-        return bgGray
+        return chalk.bgGray
+      default:
+        return chalk.inverse
     }
   }
 }

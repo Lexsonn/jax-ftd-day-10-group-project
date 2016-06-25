@@ -47,9 +47,9 @@ cli
         let output = Palette.getColor(colorname)(message)
 
         if (messagetype.length > 0) {
-          Log.log(output)
-        } else {
           Log.info(output)
+        } else {
+          Log.log(output)
         }
 
         switch (messagetype) {

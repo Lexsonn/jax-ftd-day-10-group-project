@@ -27,11 +27,11 @@ public class ClientHandler implements Runnable, Closeable {
 		this.reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		this.writer = new PrintWriter(client.getOutputStream(), true);
 		
-		writeMessage("*bgBlue**Please enter in a username");
+		writeMessage("*bgBlue*info*Please enter in a username");
 		this.setName(reader.readLine()); 
 		log.info("{}: Name set to {}", this.client.getRemoteSocketAddress(), name);
 		writeMessage("*bgBlue*username*Username set to: " + this.name);
-		this.server.addLine("has logged in.", this.name, true);
+		this.server.broadcastMessage("has logged in.", this.name, true);
 	}
 
 	@Override
@@ -41,26 +41,27 @@ public class ClientHandler implements Runnable, Closeable {
 			while (!this.client.isClosed()) {
 				String echo = reader.readLine();
 				if (CommandParser.parseCommand(echo, this)) {
-					log.info("User {} Issued command {}", name, echo);
+					log.info("User {}@{} Issued command {}", this.name, 
+							this.client.getRemoteSocketAddress().toString().substring(1), echo);
 				}
 				else {
-					log.info("received message [{}] from client {} ({}), echoing...", echo,
-							this.name, this.client.getRemoteSocketAddress());
-					this.server.addLine(echo, this.name, false);
+					log.info("received message [{}] from {}@{}, echoing...", echo,
+							this.name, this.client.getRemoteSocketAddress().toString().substring(1));
+					this.server.broadcastMessage(echo, this.name, false);
 				}
 			}
 			log.info("{}: has disconnected.", name);
-			//this.close();
+			this.server.close(this);
 		} catch (IOException e) {
 			log.warn("Client has been forcibly disconnected");
-			
+			this.server.close(this);
 		}
 	}
 
 	@Override
 	public void close() throws IOException {
 		log.info("closing connection to client {}", this.client.getRemoteSocketAddress());
-		this.server.addLine("has disconnected.", this.name, true);
+		this.server.broadcastMessage("has disconnected.", this.name, true);
 		writeMessage("*bgBlue*disconnect*disconnected from server.");
 		this.client.close();
 	}

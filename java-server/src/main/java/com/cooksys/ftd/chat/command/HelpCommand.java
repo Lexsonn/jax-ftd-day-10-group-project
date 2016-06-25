@@ -1,6 +1,7 @@
 package com.cooksys.ftd.chat.command;
 
 import com.cooksys.ftd.chat.server.ClientHandler;
+import com.cooksys.ftd.chat.server.CommandParser;
 
 public class HelpCommand extends AbstractCommand {
 
@@ -12,10 +13,7 @@ public class HelpCommand extends AbstractCommand {
 	
 	@Override
 	public void executeCommand(String message, ClientHandler clientHandler) {
-		for (AbstractCommand cmd : CommandContainer.commandList.values()) {
-			String help = "*red**" + cmd.getName() + " " + cmd.getArguments() + ": " + cmd.getDescription();
-			clientHandler.writeMessage(help);
-		}
+		CommandParser.getServer().listCommands(clientHandler);
 	}
 	
 }

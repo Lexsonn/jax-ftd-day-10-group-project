@@ -12,6 +12,8 @@ public class CommandParser {
 	}
 	
 	public static boolean parseCommand(String input, ClientHandler clientHandler) {
+		if (input.charAt(0) != '/')
+			return false;
 		char delimiter = ' ';
 		int delim = input.indexOf(delimiter);
 		
