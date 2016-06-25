@@ -1,10 +1,7 @@
 package com.cooksys.ftd.chat.server;
 
-import com.cooksys.ftd.chat.server.Server;
-
-import java.io.IOException;
-
-import com.cooksys.ftd.chat.server.ClientHandler;
+import com.cooksys.ftd.chat.command.AbstractCommand;
+import com.cooksys.ftd.chat.command.CommandContainer;
 
 public class CommandParser {
 	private static Server server;
@@ -14,20 +11,23 @@ public class CommandParser {
 		CommandParser.setServer(server);
 	}
 	
-	public static boolean parseCommand(String cmd, ClientHandler clientHandler) throws InterruptedException, IOException {
+	public static boolean parseCommand(String input, ClientHandler clientHandler) {
 		char delimiter = ' ';
-		int delim = cmd.indexOf(delimiter);
+		int delim = input.indexOf(delimiter);
 		
-		String command = cmd;
-		
-		if (delim != -1)
-			command = cmd.substring(delim);
-		
-		switch (command) {
-		case "/end": getServer().close(clientHandler); return true;
-		case "/users": getServer().listUsers(clientHandler); return true;
-		default: return false;
+		String command = input;
+		String message = "";
+		if (delim != -1) {
+			command = input.substring(0, delim);
+			message = input.substring(delim + 1);
 		}
+		
+		AbstractCommand cmd = CommandContainer.commandList.get(command);
+		
+		if (cmd == null)
+			return false;
+		cmd.executeCommand(message, clientHandler);
+		return true;
 	}
 
 	public static Server getServer() {

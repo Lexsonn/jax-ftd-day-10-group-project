@@ -50,12 +50,10 @@ public class ClientHandler implements Runnable, Closeable {
 				}
 			}
 			log.info("{}: has disconnected.", name);
-			this.close();
+			//this.close();
 		} catch (IOException e) {
-			this.server.addLine("has disconnected.", this.name, true);
-			log.warn("Client is no longer connected. Perhaps he closed out?");
-		} catch (InterruptedException e) {
-			log.error("Client command has been interrupted", e);
+			log.warn("Client has been forcibly disconnected");
+			
 		}
 	}
 
@@ -63,6 +61,7 @@ public class ClientHandler implements Runnable, Closeable {
 	public void close() throws IOException {
 		log.info("closing connection to client {}", this.client.getRemoteSocketAddress());
 		this.server.addLine("has disconnected.", this.name, true);
+		writeMessage("*bgBlue*disconnect*disconnected from server.");
 		this.client.close();
 	}
 

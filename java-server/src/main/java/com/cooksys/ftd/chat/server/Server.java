@@ -53,8 +53,9 @@ public class Server implements Runnable {
 	
 	public synchronized void addLine(String message, String name, boolean isStatus) {
 		String timestamp = getCurrentTime();
+		String messagePrefix = (isStatus) ? "*blue**" : "";
 		String messageDelim = (isStatus) ? " " : ": ";
-		String broadcast = timestamp + " - " + name + messageDelim + message;
+		String broadcast = messagePrefix + timestamp + " - " + name + messageDelim + message;
 		for (ClientHandler clientHandler : this.handlerThreads.keySet()) { // Broadcast message to erryone
 			clientHandler.writeMessage(broadcast);
 		}
@@ -85,7 +86,7 @@ public class Server implements Runnable {
 			String name = client.getName();
 			String ip = client.getSocket().getRemoteSocketAddress().toString();
 			ip = '@' + ip.substring(1);
-			clientHandler.writeMessage("***" + name + ip + "");
+			clientHandler.writeMessage("*green**" + name + ip + "");
 		}
 	}
 }
