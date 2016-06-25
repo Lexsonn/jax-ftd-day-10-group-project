@@ -27,10 +27,10 @@ public class ClientHandler implements Runnable, Closeable {
 		this.reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 		this.writer = new PrintWriter(client.getOutputStream(), true);
 		
-		writeMessage("****Please enter in a username");
+		writeMessage("*bgBlue**Please enter in a username");
 		this.setName(reader.readLine()); 
 		log.info("{}: Name set to {}", this.client.getRemoteSocketAddress(), name);
-		writeMessage("****Username set to: " + this.name);
+		writeMessage("*bgBlue*username*Username set to: " + this.name);
 		this.server.addLine("has logged in.", this.name, true);
 	}
 
