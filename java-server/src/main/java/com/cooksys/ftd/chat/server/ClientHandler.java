@@ -37,7 +37,7 @@ public class ClientHandler implements Runnable, Closeable {
 	@Override
 	public void run() {
 		try {
-			log.info("handling client {}", this.client.getRemoteSocketAddress());
+			log.info("handling client {}@{}", this.name, this.client.getRemoteSocketAddress().toString().substring(1));
 			while (!this.client.isClosed()) {
 				String echo = reader.readLine();
 				if (CommandParser.parseCommand(echo, this)) {
@@ -50,7 +50,7 @@ public class ClientHandler implements Runnable, Closeable {
 					this.server.broadcastMessage(echo, this.name, false);
 				}
 			}
-			log.info("{}: has disconnected.", name);
+			log.info("{}@{}: has disconnected.", this.name, this.client.getRemoteSocketAddress().toString().substring(1));
 			this.server.close(this);
 		} catch (IOException e) {
 			log.warn("Client has been forcibly disconnected");

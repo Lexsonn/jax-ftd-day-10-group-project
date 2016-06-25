@@ -10,9 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cooksys.ftd.chat.command.AbstractCommand;
-import com.cooksys.ftd.chat.command.CommandContainer;
-
 public class Server implements Runnable {
 
 	Logger log = LoggerFactory.getLogger(Server.class);
@@ -93,12 +90,12 @@ public class Server implements Runnable {
 		log.info("Client {}@{} has requested a list of users.", 
 				clientHandler, clientHandler.getSocket().getRemoteSocketAddress().toString().substring(1));
 		
-		clientHandler.writeMessage("*green*users*USER LIST:");
+		clientHandler.writeMessage("*bgGreen*users*USER LIST:");
 		for (ClientHandler client : this.handlerThreads.keySet()) {
 			try {
 				Thread.sleep(20);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error("Error with sleeping Thread", e);
 			}
 			String name = client.getName();
 			String ip = client.getSocket().getRemoteSocketAddress().toString();
@@ -108,17 +105,6 @@ public class Server implements Runnable {
 	}
 	
 	public void listCommands(ClientHandler clientHandler) {
-		log.info("Client {}@{} has requested help.", 
-				clientHandler, clientHandler.getSocket().getRemoteSocketAddress().toString().substring(1));
 		
-		clientHandler.writeMessage("*green*help*HELP COMMANDS:");
-		for (AbstractCommand cmd : CommandContainer.commandList.values()) {
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			clientHandler.writeMessage("*green*help*" + cmd.getName() + "\t" + cmd.getArguments() + ":\t" + cmd.getDescription());
-		}
 	}
 }
