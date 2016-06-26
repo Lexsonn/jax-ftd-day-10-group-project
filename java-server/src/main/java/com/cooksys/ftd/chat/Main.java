@@ -15,14 +15,10 @@ public class Main {
 	static Logger log = LoggerFactory.getLogger(Main.class);
 	
 	public static void main(String[] args) {
-		HelpCommand help = new HelpCommand();
-		MeCommand me = new MeCommand();
-		UsersCommand users = new UsersCommand();
-		EndCommand end = new EndCommand();
-		CommandContainer.commandList.put(help.getName(), help);
-		CommandContainer.commandList.put(me.getName(), me);
-		CommandContainer.commandList.put(users.getName(), users);
-		CommandContainer.commandList.put(end.getName(), end);
+		CommandContainer.register(HelpCommand.class);
+		CommandContainer.register(MeCommand.class);
+		CommandContainer.register(EndCommand.class);
+		CommandContainer.register(UsersCommand.class);
 		
 		Server server = new Server(667);
 		Thread serverThread = new Thread(server);

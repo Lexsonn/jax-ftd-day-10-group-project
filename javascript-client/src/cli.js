@@ -28,7 +28,8 @@ cli
     cli._baseExitMode = cli._exitMode
     cli._exitMode = function (args) {
       cli.delimiter(DEFAULT_DELIMITER)
-      return cli._baseExitMode(args)
+
+      return cli._cleanlyExitMode(args) // see below for the custom func
     }
 
     server = net.createConnection(args, () => {
@@ -84,6 +85,15 @@ cli
 const exit = cli.find('exit')
 if (exit) {
   exit.description('Exits ' + LONG_NAME)
+}
+
+cli._cleanlyExitMode = function (args) {
+  let ret = cli._baseExitMode(args)
+
+  cli._exitMode = cli._baseExitMode
+  delete cli._baseExitMode
+
+  return ret
 }
 
 export default cli
