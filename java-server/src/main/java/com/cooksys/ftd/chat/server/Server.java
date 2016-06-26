@@ -98,7 +98,7 @@ public class Server implements Runnable {
 			String name = client.getName();
 			String ip = client.getSocket().getRemoteSocketAddress().toString();
 			ip = '@' + ip.substring(1);
-			clientHandler.writeMessage("*green*users*" + name + ip);
+			clientHandler.writeMessage("*green**" + name + ip);
 		}
 	}
 	

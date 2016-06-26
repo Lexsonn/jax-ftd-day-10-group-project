@@ -27,7 +27,7 @@ public class HelpCommand extends AbstractCommand {
 			} catch (InterruptedException e) {
 				log.error("Error with sleeping Thread", e);
 			}
-			clientHandler.writeMessage("*magenta*help*" + cmd.getName() + "\t" + cmd.getArguments() + ":\t" + cmd.getDescription());
+			clientHandler.writeMessage("*magenta**" + cmd.getName() + "\t" + cmd.getArguments() + ":\t" + cmd.getDescription());
 		}
 	}
 	
