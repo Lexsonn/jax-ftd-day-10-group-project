@@ -12,23 +12,27 @@ public class CommandParser {
 	}
 	
 	public static boolean parseCommand(String input, ClientHandler clientHandler) {
-		if (input.charAt(0) != '/')
+		String[] inputs = input.split("\\*", 3);
+		String inputType = inputs[1];
+		String inputMessage = inputs[2];
+				
+		if (inputMessage.charAt(0) != '/')
 			return false;
 		char delimiter = ' ';
-		int delim = input.indexOf(delimiter);
+		int delim = inputMessage.indexOf(delimiter);
 		
-		String command = input;
+		String command = inputMessage;
 		String message = "";
 		if (delim != -1) {
-			command = input.substring(0, delim);
-			message = input.substring(delim + 1);
+			command = inputMessage.substring(0, delim);
+			message = inputMessage.substring(delim + 1);
 		}
 		
 		AbstractCommand cmd = CommandContainer.commandList.get(command);
 		
 		if (cmd == null)
 			return false;
-		cmd.executeCommand(message, clientHandler);
+		cmd.executeCommand(message, inputType, clientHandler);
 		return true;
 	}
 

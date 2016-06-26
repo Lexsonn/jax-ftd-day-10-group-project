@@ -17,7 +17,7 @@ public class EndCommand extends AbstractCommand {
 	}
 	
 	@Override
-	public void executeCommand(String message, ClientHandler clientHandler) {
+	public void executeCommand(String message, String inputType, ClientHandler clientHandler) {
 		CommandParser.getServer().close(clientHandler);
 	}
 }

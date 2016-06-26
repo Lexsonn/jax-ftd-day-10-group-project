@@ -1,40 +1,36 @@
+'use strict'
+
+/** SECTION: libs */
 import net from 'net'
-import vorpal from 'vorpal'
 
 const Palette = require('./palette')
+const { Vorpal, Log } = require('./vorpal')
+const { LONG_NAME, DEFAULT_DELIMITER, CLIENT_MESSAGE, SERVICE_MESSAGE } = require('./defs')
 
-const cli = vorpal()
-
-import vorpalLogger from 'vorpal-log'
-
-const LONG_NAME = 'ftd-chat'
-const DEFAULT_DELIMITER = 'ftd-chat~$'
+/** SECTION: defs */
 var ADDRESS = {}
-var Vars = {}
+var Vars = { commands: [] }
 
-// cli config
-cli.use(vorpalLogger)
-  .delimiter(DEFAULT_DELIMITER)
-
-const Log = cli.logger
-
-// connect mode
+/** SECTION: code */
 let server
 
-cli
+Vorpal
   .mode('connect <port> [host]')
   .delimiter('connected:')
   .init(function (args, callback) {
-    cli._baseExitMode = cli._exitMode
-    cli._exitMode = function (args) {
-      cli.delimiter(DEFAULT_DELIMITER)
+    Vorpal._baseExitMode = Vorpal._exitMode
+    Vorpal._exitMode = function (args) {
+      Vorpal.delimiter(DEFAULT_DELIMITER)
 
-      return cli._cleanlyExitMode(args) // see below for the custom func
+      return Vorpal._cleanlyExitMode(args) // see below for the custom func
     }
 
     server = net.createConnection(args, () => {
       ADDRESS = server.address()
       Log.log(`connected to server ${ADDRESS.address}:${ADDRESS.port}`)
+
+      server.write(SERVICE_MESSAGE + '/list\n')
+
       callback()
     })
 
@@ -45,23 +41,42 @@ cli
         let messagetype = arr[2]
         let message = arr[3]
 
-        let output = Palette.getColor(colorname)(message)
-
-        if (messagetype.length > 0) {
-          Log.info(output)
-        } else {
-          Log.log(output)
+        let output = message
+        if (colorname !== 'plain') {
+          output = Palette.getColor(colorname)(message)
         }
 
-        switch (messagetype) {
-          case 'username':
-            let arr = /Username set to: (.*)$/.exec(data.toString())
-            Vars.username = arr[1]
-            cli.delimiter(arr[1] + '@' + ADDRESS.address)
-            break
-          case 'disconnect':
-            cli.execSync('exit')
-            break
+        if (messagetype.length > 0) {
+          let display = true
+
+          switch (messagetype) {
+            case 'authenticate':
+              display = false
+              Vars._authenticatingDelimiter = output + '$ '
+              Vorpal.ui.delimiter(Vars._authenticatingDelimiter)
+              Vars.authenticating = true
+              break
+            case 'username':
+              let arr = /Username set to: (.*)$/.exec(data.toString())
+              Vars.username = arr[1]
+              Vorpal.delimiter(arr[1] + '@' + ADDRESS.address)
+              Vorpal.ui.delimiter(arr[1] + '@' + ADDRESS.address + ' connected: ')
+              break
+            case 'serviceCommands':
+              display = false
+              message = message.replace(/^\[|\]$/g, '')
+              Vars.commands = message.split(/\s*,\s*/)
+              break
+            case 'disconnect':
+              Vorpal.execSync('exit')
+              break
+          }
+
+          if (display) {
+            Log.info(output)
+          }
+        } else {
+          Log.log(output)
         }
       } else {
         Log.log(data.toString())
@@ -69,7 +84,7 @@ cli
     })
 
     server.on('end', () => {
-      Log.log('server disconnected')
+      Log.info('server disconnected')
     })
 
     server.on('error', args => {
@@ -78,22 +93,17 @@ cli
     })
   })
   .action(function (command, callback) {
-    server.write(command + '\n')
+    if (Vars.authenticating) {
+      if (command.match(/^\s*$/) || command.match(/^\*/) || Vars.commands.indexOf(command) > -1) {
+        Vorpal.ui.delimiter(Vars._authenticatingDelimiter)
+      } else {
+        server.write(CLIENT_MESSAGE + command + '\n')
+        Vars.authenticating = false
+      }
+    } else {
+      server.write(CLIENT_MESSAGE + command + '\n')
+    }
     callback()
   })
 
-const exit = cli.find('exit')
-if (exit) {
-  exit.description('Exits ' + LONG_NAME)
-}
-
-cli._cleanlyExitMode = function (args) {
-  let ret = cli._baseExitMode(args)
-
-  cli._exitMode = cli._baseExitMode
-  delete cli._baseExitMode
-
-  return ret
-}
-
-export default cli
+export default Vorpal

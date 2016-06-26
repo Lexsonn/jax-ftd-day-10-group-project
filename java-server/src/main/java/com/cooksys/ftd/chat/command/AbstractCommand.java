@@ -25,7 +25,7 @@ public class AbstractCommand {
 		return this.description;
 	}
 	
-	public void executeCommand(String message, ClientHandler clientHandler) {
+	public void executeCommand(String message, String inputType, ClientHandler clientHandler) {
 		
 	}
 }

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.cooksys.ftd.chat.command.CommandContainer;
 import com.cooksys.ftd.chat.command.EndCommand;
 import com.cooksys.ftd.chat.command.HelpCommand;
+import com.cooksys.ftd.chat.command.ListCommand;
 import com.cooksys.ftd.chat.command.MeCommand;
 import com.cooksys.ftd.chat.command.UsersCommand;
 import com.cooksys.ftd.chat.server.Server;
@@ -19,6 +20,8 @@ public class Main {
 		CommandContainer.register(MeCommand.class);
 		CommandContainer.register(EndCommand.class);
 		CommandContainer.register(UsersCommand.class);
+		CommandContainer.register(ListCommand.class);
+		CommandContainer.ready();
 		
 		Server server = new Server(667);
 		Thread serverThread = new Thread(server);

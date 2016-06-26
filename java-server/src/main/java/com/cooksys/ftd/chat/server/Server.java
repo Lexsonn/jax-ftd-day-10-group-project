@@ -101,8 +101,4 @@ public class Server implements Runnable {
 			clientHandler.writeMessage("*green*users*" + name + ip);
 		}
 	}
-	
-	public void listCommands(ClientHandler clientHandler) {
-		
-	}
 }

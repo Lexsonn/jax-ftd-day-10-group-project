@@ -5,8 +5,7 @@ const chalk = require('chalk')
 const Palette = {
   getColor: function (colorname) {
     let obj = chalk
-    let call = colorname
-    colorname.split('.').forEach(a => { obj = obj[a] })
+    colorname.split('.').forEach(call => { obj = obj[call] })
     return obj
   }
 }
