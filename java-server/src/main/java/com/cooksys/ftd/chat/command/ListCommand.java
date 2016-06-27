@@ -11,7 +11,7 @@ public class ListCommand extends AbstractCommand {
 	public ListCommand() {
 		super ("/list",
 			   "(no arguments)",
-			   "Displays a list of messages");
+			   "Displays a list of commands");
 	}
 	
 	@Override
