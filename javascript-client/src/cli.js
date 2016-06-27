@@ -22,6 +22,11 @@ Vorpal
     Vorpal._exitMode = function (args) {
       Vorpal.delimiter(DEFAULT_DELIMITER)
 
+      try {
+        server.write(SERVICE_MESSAGE + '/end\n')
+      } catch (e) {
+        // do nothing.. they didnt fully connect before disconnecting
+      }
       return Vorpal._cleanlyExitMode(args) // see below for the custom func
     }
 
