@@ -72,7 +72,7 @@ public class Server implements Runnable {
 		if (thread == null)
 			return;
 		log.info("Client {}@{} has ended the connection.", 
-				clientHandler, clientHandler.getSocket().getRemoteSocketAddress().toString().substring(1));
+				clientHandler.getName(), clientHandler.getSocket().getRemoteSocketAddress().toString().substring(1));
 		try {
 			handlerThreads.remove(clientHandler);
 			clientHandler.close();
@@ -98,7 +98,7 @@ public class Server implements Runnable {
 			String name = client.getName();
 			String ip = client.getSocket().getRemoteSocketAddress().toString();
 			ip = '@' + ip.substring(1);
-			clientHandler.writeMessage("*green*users*" + name + ip);
+			clientHandler.writeMessage("*green**" + name + ip);
 		}
 	}
 }

@@ -23,7 +23,7 @@ public class HelpCommand extends AbstractCommand {
 				
 		clientHandler.writeMessage("*bgMagenta*help*HELP COMMANDS:");
 		
-		String header = "*magenta*help*";
+		String header = "*magenta**";
 		Collection<String> messages = CommandContainer.getHelpMessages();
 		for(String helpMessage: messages) {
 			try {
