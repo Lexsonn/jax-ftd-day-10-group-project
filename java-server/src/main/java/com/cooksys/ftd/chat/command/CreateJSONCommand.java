@@ -2,10 +2,10 @@ package com.cooksys.ftd.chat.command;
 
 import com.cooksys.ftd.chat.server.ClientHandler;
 
-public class SendCommand extends AbstractCommand {
+public class CreateJSONCommand extends AbstractCommand {
 	
-	public SendCommand() {
-		super ("/send",
+	public CreateJSONCommand() {
+		super ("/createjson",
 			   "(object to send, formatted as {name: field, ...})",
 			   "Broadcast an object to other clients");
 	}
