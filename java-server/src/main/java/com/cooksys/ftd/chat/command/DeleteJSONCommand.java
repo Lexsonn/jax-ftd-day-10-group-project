@@ -6,4 +6,6 @@ public class DeleteJSONCommand extends AbstractCommand {
 			   "(file name)",
 			   "Delete JSON file on server");
 	}
+	
+	
 }

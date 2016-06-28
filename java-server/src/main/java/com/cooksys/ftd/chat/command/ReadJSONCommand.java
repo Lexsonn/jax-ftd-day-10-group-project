@@ -7,4 +7,6 @@ public class ReadJSONCommand extends AbstractCommand {
 			   "(file name)",
 			   "read json object on server");
 	}
+	
+	
 }

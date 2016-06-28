@@ -105,5 +105,8 @@ public class ClientHandler implements Runnable, Closeable {
 		writer.print(message);
 		writer.flush();
 	}
-
+	
+	public String getMessage() throws IOException {
+		return reader.readLine();
+	}
 }

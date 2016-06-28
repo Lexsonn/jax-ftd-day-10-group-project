@@ -7,4 +7,6 @@ public class UpdateJSONCommand extends AbstractCommand {
 			   "(file name)",
 			   "Update JSON file on server");
 	}
+	
+	
 }
