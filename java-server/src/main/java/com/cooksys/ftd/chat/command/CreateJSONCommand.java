@@ -1,16 +1,8 @@
 package com.cooksys.ftd.chat.command;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.eclipse.persistence.jaxb.dynamic.DynamicJAXBContext;
-import org.eclipse.persistence.jaxb.dynamic.DynamicJAXBContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,24 +30,23 @@ public class CreateJSONCommand extends AbstractCommand {
 			clientHandler.writeMessage(msgColor + "EMISC*Invalid JSON file name entered.");
 			return;
 		}
-		if (!message.substring(message.length() - 4).equals(".json"))
-			message += ".json";
+		if (message.length() > 4) {
+			if (!message.substring(message.length() - 4).equals(".json"))
+				message += ".json";
+		}
+		else message += ".json";
 		
 		FileWriter file;
 		clientHandler.writeMessage("*bgBlue*cjo_ready*Please enter in a JSON object:");
 		try {
-			String input = clientHandler.getMessage();
-			// InputStream input = clientHandler.getSocket().getInputStream();
-			InputStream stream = new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
-			DynamicJAXBContext jaxbContext = DynamicJAXBContextFactory.createContextFromXSD(stream, null, null, null);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			
+			String input = clientHandler.getMessage().substring(8);
+			log.info("Input: " + input);
 			file = new FileWriter("C:/code/TextFiles/" + message);
-			file.write(unmarshaller.toString());
+			file.write(input);
 			msgColor = "*green*";
-			clientHandler.writeMessage(msgColor + "cjo_sucess*Server error on creating JSON file.");
+			clientHandler.writeMessage(msgColor + "cjo_sucess*Server sucessfully created JSON file.");
 			file.close();
-		} catch (IOException | JAXBException e) {
+		} catch (IOException e) {
 			log.error("Error in handling client input for JSON", e);
 			clientHandler.writeMessage(msgColor + "EMISCERR*Server error on creating JSON file.");
 		}

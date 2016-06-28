@@ -4,10 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.cooksys.ftd.chat.command.CommandContainer;
+import com.cooksys.ftd.chat.command.CreateJSONCommand;
+import com.cooksys.ftd.chat.command.DeleteJSONCommand;
 import com.cooksys.ftd.chat.command.EndCommand;
 import com.cooksys.ftd.chat.command.HelpCommand;
 import com.cooksys.ftd.chat.command.ListCommand;
 import com.cooksys.ftd.chat.command.MeCommand;
+import com.cooksys.ftd.chat.command.ReadJSONCommand;
+import com.cooksys.ftd.chat.command.UpdateJSONCommand;
 import com.cooksys.ftd.chat.command.UsersCommand;
 import com.cooksys.ftd.chat.server.Server;
 
@@ -21,6 +25,12 @@ public class Main {
 		CommandContainer.register(EndCommand.class);
 		CommandContainer.register(UsersCommand.class);
 		CommandContainer.register(ListCommand.class);
+		/*
+		CommandContainer.register(CreateJSONCommand.class);
+		CommandContainer.register(ReadJSONCommand.class);
+		CommandContainer.register(UpdateJSONCommand.class);
+		CommandContainer.register(DeleteJSONCommand.class);
+		*/
 		CommandContainer.ready();
 		
 		Server server = new Server(667);

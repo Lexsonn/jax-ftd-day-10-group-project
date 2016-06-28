@@ -62,7 +62,6 @@ public class ClientHandler implements Runnable, Closeable {
 				String echo = reader.readLine();
 				String[] inputs = echo.split("\\*", 3);
 				String message = inputs[2];	
-
 				if (CommandParser.parseCommand(echo, this)) {
 					log.info("User {}@{} Issued command {}", this.name, 
 							this.client.getRemoteSocketAddress().toString().substring(1), echo);
