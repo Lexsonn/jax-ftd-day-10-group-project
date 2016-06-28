@@ -17,7 +17,7 @@ public class ListCommand extends AbstractCommand {
 	@Override
 	public void executeCommand(String message, String inputType, ClientHandler clientHandler) {
 		boolean silently = inputType.equals("service");
-		log.info("Client {}@{} has requested list.", clientHandler.getName(), 
+		log.info("Client {}@{} has requested a list of commands.", clientHandler.getName(), 
 				 clientHandler.getSocket().getRemoteSocketAddress().toString().substring(1));
 
 		String clientMessage = CommandContainer.listCommands();

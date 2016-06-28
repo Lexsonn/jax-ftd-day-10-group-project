@@ -1,14 +1,9 @@
 package com.cooksys.ftd.chat.command;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.cooksys.ftd.chat.server.ClientHandler;
 import com.cooksys.ftd.chat.server.CommandParser;
 
 public class EndCommand extends AbstractCommand {
-	
-	Logger log = LoggerFactory.getLogger(EndCommand.class);
 	
 	public EndCommand() {
 		super("/end",
